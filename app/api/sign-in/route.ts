@@ -17,7 +17,7 @@ export async function POST(req: Request){
         const salt = 10;
             //hash the password for the user
         const hashedPassword = await bcrypt.hash(password, salt)
-        if (hashedPassword == user?.passwordHash){
+        if (hashedPassword != user?.passwordHash){
             return Response.json({'error': 'Invalid email or password, please try again'}, {status: 400})
         }
 
