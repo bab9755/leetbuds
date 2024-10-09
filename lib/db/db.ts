@@ -2,7 +2,7 @@ import { MongoClient } from "mongodb";
 import * as jose from 'jose'
 import * as bcrypt from 'bcrypt'
 
-    const client = new MongoClient(process.env.MONGODB_UR || '');
+    const client = new MongoClient(process.env.MONGODB_URI || '');
     if (!client){
         console.log('Sucessfully connected the client to the DB.');
     }
