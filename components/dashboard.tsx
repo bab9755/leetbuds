@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -10,6 +10,31 @@ import { LayoutDashboard, Code, Settings, LogOut, Users, UserPlus, Calendar } fr
 export function DashboardComponent() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
+  const [userId, setUserID] = useState('')
+
+  useEffect(() => {
+    // Effect code here
+    const getSession = async () => {
+
+      try{
+        const response = await fetch('api/get-session', {
+          method: 'GET',
+        })
+        if(!response.ok){
+          console.log(`An error occured.`)
+        } else {
+          const data = await response.json()
+          setUserID(data.userId);
+        }
+      } catch (error){
+        console.log(`An error occured getting the session: ${error}.`)
+      }
+      
+    }
+    getSession();
+    
+    
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {
