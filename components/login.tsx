@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertCircle } from "lucide-react"
+import { useRouter } from 'next/router'
 
 export function LoginComponent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
@@ -26,6 +28,22 @@ export function LoginComponent() {
     // Reset form after submission
     setEmail('')
     setPassword('')
+    try {
+      const response = await fetch('api/sign-in/', {
+        method: 'POST', 
+        body: JSON.stringify({email: email, password: password})
+      })
+
+      if(!response.ok){
+        console.log(`There was a bad request`);
+      } else{
+        router.push('/dashboard');
+      }
+
+    } catch(error){
+      console.log(`Error signing in, please try again: ${error}.`)
+    }
+    
   }
 
   return (
