@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import * as jose from 'jose'
 import * as bcrypt from 'bcrypt'
 
@@ -46,6 +46,18 @@ export const createUser = async (name: string, email: string, password: string) 
         console.log(`An error occured creating a new user: ${error}`)
     }
 }
+
+export const getUserById = async (id: any) => {
+    try{
+        const userCollection = await getDB('leetbuds', 'users');
+        const objectId = new ObjectId(id)
+        const user = await userCollection?.findOne({_id: objectId})
+        return user
+    }catch (error){
+        console.log(`An error occured getting the user by Id: ${error}`)
+    }
+}
+
 
 
 export const getUserByEmail = async (email: string) => {
