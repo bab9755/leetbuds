@@ -6,11 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { LayoutDashboard, Code, Settings, LogOut, Users, UserPlus, Calendar } from "lucide-react"
+import { LoadingSpinnerComponent } from './loading-spinner'
 
 export function DashboardComponent() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
   const [userId, setUserID] = useState('')
+  const [name, setName] = useState('')
+  const [progress, setProgress] = useState(null)
+  const [nextInterview, setNextInterview] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Effect code here
@@ -25,6 +30,11 @@ export function DashboardComponent() {
         } else {
           const data = await response.json()
           setUserID(data.userId);
+          setName(data.userName.split(" ")[0]) //get the first name
+          setProgress(data.progress)
+          setNextInterview(data.nextInterview)
+          setLoading(false)
+
         }
       } catch (error){
         console.log(`An error occured getting the session: ${error}.`)
@@ -34,7 +44,7 @@ export function DashboardComponent() {
     getSession();
     
     
-  }, []);
+  }, [name, progress, nextInterview]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -56,10 +66,18 @@ export function DashboardComponent() {
                 <CardTitle>Your Next Interview</CardTitle>
               </CardHeader>
               <CardContent>
+                {nextInterview == 0 ? 
+                (<div>
+                <p className="text-lg mb-2">No interviews on sight</p> 
+                <Button variant="outline">Schedule</Button>
+                </div>
+                ) 
+                : (<>
                 <p className="text-lg mb-2">Mock Interview with <span className="font-semibold">Sarah Lee</span></p>
-                <p className="text-gray-400">Date: May 15, 2024</p>
-                <p className="text-gray-400 mb-4">Time: 2:00 PM EST</p>
-                <Button variant="outline">Prepare</Button>
+                  <p className="text-gray-400">Date: May 15, 2024</p>
+                  <p className="text-gray-400 mb-4">Time: 2:00 PM EST</p>
+                  <Button variant="outline">Prepare</Button></>)}
+                
               </CardContent>
             </Card>
             <Card>
@@ -67,7 +85,7 @@ export function DashboardComponent() {
                 <CardTitle>Your Progress</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold mb-2">75 / 100</p>
+                <p className="text-2xl font-bold mb-2">{progress} / 100</p>
                 <p className="text-gray-400">Problems solved this week</p>
               </CardContent>
             </Card>
@@ -208,9 +226,18 @@ export function DashboardComponent() {
 
       {/* Main content */}
       <main className="flex-1 p-8">
-        <h1 className="text-3xl font-bold mb-6">Welcome back, User!</h1>
-        {renderContent()}
-      </main>
+  {loading ? (
+    <div className="flex flex-col items-center justify-center h-full">
+      <LoadingSpinnerComponent height={60} width={60} color="light" />
+      <p className="mt-4 text-white text-lg">Loading Leetbuds...</p>
+    </div>
+  ) : (
+    <>
+      <h1 className="text-3xl font-bold mb-6">Welcome back, {name}!</h1>
+      {renderContent()}
+    </>
+  )}
+</main>
     </div>
   )
 }

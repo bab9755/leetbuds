@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertCircle } from "lucide-react"
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 export function LoginComponent() {
   const [email, setEmail] = useState('')
@@ -29,7 +29,7 @@ export function LoginComponent() {
     setEmail('')
     setPassword('')
     try {
-      const response = await fetch('api/sign-in/', {
+      const response = await fetch('/api/sign-in', {
         method: 'POST', 
         body: JSON.stringify({email: email, password: password})
       })

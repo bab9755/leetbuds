@@ -18,9 +18,6 @@ export async function GET(req: Request) {
         const email = user?.email
         const nextInterview = user?.upcomingInterviews[0] || 0
         
-
-
-        
          
         return Response.json({
             userId: userid.payload.userId,

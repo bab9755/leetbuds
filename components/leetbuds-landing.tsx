@@ -48,7 +48,9 @@ export function LeetbudsLanding() {
               Leetbuds: Where friends solve LeetCode problems, track progress, and elevate coding skills as a team.
             </p>
             <Button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+              <Link href='/sign-up'>
               Join Leetbuds
+              </Link>
             </Button>
           </div>
           <div className="lg:w-1/2">
