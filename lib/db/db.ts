@@ -34,6 +34,11 @@ export const createUser = async (name: string, email: string, password: string) 
             name: name,
             email: email,
             passwordHash: hashedPassword,
+            teamId: null,
+            solvedQuestions: [], //will contained the id of each solved question
+            questionsCompleted: 0, //the number of completed questions
+            upcomingInterviews: [] //the different interviews that will happen for the user.
+
         }
         const user = await userCollection?.insertOne(userSchema)
         return user;
