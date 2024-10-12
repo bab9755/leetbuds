@@ -1,6 +1,7 @@
 import { MongoClient, ObjectId } from "mongodb";
 import * as jose from 'jose'
 import * as bcrypt from 'bcrypt'
+import { blind75 } from "../utils";
 
     const client = new MongoClient(process.env.MONGODB_URI || '');
     if (!client){
@@ -65,3 +66,11 @@ export const getUserByEmail = async (email: string) => {
     const user = await userCollection?.findOne({ email: email})
     return user;
   }
+
+
+export const uploadQuestions = async (questionsArray: any) => {
+    const questionsCollection = await getDB('leetbuds', 'questions')
+    const result = questionsCollection?.insertMany(questionsArray)
+    return result
+  }
+  
