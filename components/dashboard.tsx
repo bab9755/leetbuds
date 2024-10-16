@@ -17,7 +17,7 @@ export function DashboardComponent() {
   const [progress, setProgress] = useState(null)
   const [nextInterview, setNextInterview] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [users, setUsers] = useState(null);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     // Effect code here
@@ -53,6 +53,13 @@ export function DashboardComponent() {
     
     
   }, [name, progress, nextInterview]);
+  
+  const getFilteredUsers = (items: User[], query: string) => {
+    if (!query){
+      return items
+    }
+    return items.filter(user => user.name.includes(query))
+  }
 
   const renderContent = () => {
     switch (activeSection) {
@@ -140,11 +147,11 @@ export function DashboardComponent() {
                 />
               </div>
               <div className="space-y-4">
-                {users?.map((friend?) => (
+                {users?.map((friend) => (
                   <div key={friend?._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                     <div className="flex items-center">
                       <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-3">
-                        {friend[0]}
+                        {friend.name[0]}
                       </div>
                       <span>{friend?.name}</span>
                     </div>
