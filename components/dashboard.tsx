@@ -9,6 +9,7 @@ import { LayoutDashboard, Code, Settings, LogOut, Users, UserPlus, Calendar } fr
 import { LoadingSpinnerComponent } from './loading-spinner'
 import { fetchUsersButSelf } from '@/lib/db/db'
 import { User } from '@/lib/db/db'
+import next from 'next'
 export function DashboardComponent() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
@@ -16,7 +17,7 @@ export function DashboardComponent() {
   const [name, setName] = useState('')
   const [progress, setProgress] = useState(null)
   const [nextInterview, setNextInterview] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -35,11 +36,11 @@ export function DashboardComponent() {
           setName(data.userName.split(" ")[0]) //get the first name
           setProgress(data.progress)
           setNextInterview(data.nextInterview)
-          setLoading(false)
           const res = await fetch('api/users', {method: 'POST', body: JSON.stringify({id: data.userId})})
           const usersData = await res.json()
           const users = usersData.users
           setUsers(users)
+          setLoading(false);
         }
       } catch (error){
         console.log(`An error occured getting the session: ${error}.`)
@@ -47,10 +48,6 @@ export function DashboardComponent() {
       
     }
     getSession();
-    
-
-    
-    
     
   }, [name, progress, nextInterview]);
   
@@ -60,6 +57,7 @@ export function DashboardComponent() {
     }
     return items.filter(user => user.name.includes(query))
   }
+  // const filteredUsers = getFilteredUsers(users, searchQuery);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -147,7 +145,7 @@ export function DashboardComponent() {
                 />
               </div>
               <div className="space-y-4">
-                {users?.map((friend) => (
+                {users.map((friend) => (
                   <div key={friend?._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                     <div className="flex items-center">
                       <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-3">
