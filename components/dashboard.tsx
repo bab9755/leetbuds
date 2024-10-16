@@ -7,7 +7,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { LayoutDashboard, Code, Settings, LogOut, Users, UserPlus, Calendar } from "lucide-react"
 import { LoadingSpinnerComponent } from './loading-spinner'
-
+import { fetchUsersButSelf } from '@/lib/db/db'
+import { User } from '@/lib/db/db'
 export function DashboardComponent() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
@@ -16,7 +17,7 @@ export function DashboardComponent() {
   const [progress, setProgress] = useState(null)
   const [nextInterview, setNextInterview] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [users, setUsers]  = useState([]);
+  const [users, setUsers] = useState(null);
 
   useEffect(() => {
     // Effect code here
@@ -35,7 +36,10 @@ export function DashboardComponent() {
           setProgress(data.progress)
           setNextInterview(data.nextInterview)
           setLoading(false)
-
+          const res = await fetch('api/users', {method: 'POST', body: JSON.stringify({id: data.userId})})
+          const usersData = await res.json()
+          const users = usersData.users
+          setUsers(users)
         }
       } catch (error){
         console.log(`An error occured getting the session: ${error}.`)
@@ -44,6 +48,7 @@ export function DashboardComponent() {
     }
     getSession();
     
+
     
     
     
@@ -135,13 +140,13 @@ export function DashboardComponent() {
                 />
               </div>
               <div className="space-y-4">
-                {['Alice Johnson', 'Bob Smith', 'Charlie Brown'].map((friend) => (
-                  <div key={friend} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+                {users?.map((friend?) => (
+                  <div key={friend?._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                     <div className="flex items-center">
                       <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-3">
                         {friend[0]}
                       </div>
-                      <span>{friend}</span>
+                      <span>{friend?.name}</span>
                     </div>
                     <div className="space-x-2">
                       <Button size="sm" variant="outline">

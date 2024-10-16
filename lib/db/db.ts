@@ -86,3 +86,10 @@ export const fetchUsersButSelf = async(id: any) => {
     console.log(`Here are the retrieved users: ${users}`)
     return users
 }
+
+export interface User {
+    _id: string;         // or ObjectId if you're using ObjectId
+    name: string;
+    email: string;
+    // Add other fields that are present in your user documents
+  }
