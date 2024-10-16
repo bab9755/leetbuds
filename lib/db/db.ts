@@ -74,3 +74,15 @@ export const uploadQuestions = async (questionsArray: any) => {
     return result
   }
   
+export const fetchUsersButSelf = async(id: any) => {
+    const userCollection = await getDB('leetbuds', 'users')
+    const users = await userCollection?.aggregate([
+        {
+            $match: {
+                _id: {$ne: new ObjectId(id)}
+            }
+        }
+    ]).toArray()
+    console.log(`Here are the retrieved users: ${users}`)
+    return users
+}

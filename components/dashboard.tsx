@@ -16,6 +16,7 @@ export function DashboardComponent() {
   const [progress, setProgress] = useState(null)
   const [nextInterview, setNextInterview] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [users, setUsers]  = useState([]);
 
   useEffect(() => {
     // Effect code here
@@ -42,6 +43,8 @@ export function DashboardComponent() {
       
     }
     getSession();
+    
+    
     
     
   }, [name, progress, nextInterview]);
