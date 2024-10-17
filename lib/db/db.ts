@@ -87,9 +87,25 @@ export const fetchUsersButSelf = async(id: any) => {
     return users
 }
 
+
+export const createTeam = async (userId: any) =>{
+    const teamCollection = await getDB('leetbuds', 'teams');
+    const team = teamCollection?.insertOne({teamMembers: []})
+}
+
+export const addFriend = async (userId: any, anotherUserId: any) => {
+    const user = await getUserById(userId)
+    if (!user?.teamId){
+        const team = await createTeam(userId)
+    }
+
+}
+
 export interface User {
     _id: string;         // or ObjectId if you're using ObjectId
     name: string;
     email: string;
     // Add other fields that are present in your user documents
   }
+
+
