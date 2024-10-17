@@ -90,14 +90,29 @@ export const fetchUsersButSelf = async(id: any) => {
 
 export const createTeam = async (userId: any) =>{
     const teamCollection = await getDB('leetbuds', 'teams');
-    const team = teamCollection?.insertOne({teamMembers: []})
+    const id = new ObjectId(userId)
+
+    const team = await teamCollection?.insertOne({teamMembers: [id]}) //append the user to teh new team
+    const user = await getUserById(userId)
+    if (user){
+        user.teamId = team?.insertedId
+    }
+    return team //return the newly created team
+}
+export const addUserToTeam = async (teamId: any, userId: any) => {
+    const teamCollection = await getDB('leetbuds', 'teams');
+    const team = await teamCollection?.findOne({_id: new ObjectId(teamId)})
+    team?.teamMembers?.push(userId)
+    const result = await teamCollection?.updateOne({_id: new ObjectId(teamId)}, {$set: {teamMembers: team?.teamMembers}})
+    return result
 }
 
 export const addFriend = async (userId: any, anotherUserId: any) => {
     const user = await getUserById(userId)
     if (!user?.teamId){
-        const team = await createTeam(userId)
-    }
+        const team = await createTeam(userId) //create a team using the primary user id
+        const result = await addUserToTeam(team?.insertedId, anotherUserId)
+    } 
 
 }
 
