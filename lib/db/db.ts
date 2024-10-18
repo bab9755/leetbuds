@@ -22,6 +22,12 @@ export const getDB = async (databaseName: string, collectionName: string) => {
     
 }
 
+export const getAllUsers = async () => {
+    const userCollection = await getDB('leetbuds', 'users');
+    const users = await userCollection?.find().toArray()
+    return users
+}
+
 export const createUser = async (name: string, email: string, password: string) => {
     
     try{
@@ -104,6 +110,10 @@ export const addUserToTeam = async (teamId: any, userId: any) => {
     const team = await teamCollection?.findOne({_id: new ObjectId(teamId)})
     team?.teamMembers?.push(userId)
     const result = await teamCollection?.updateOne({_id: new ObjectId(teamId)}, {$set: {teamMembers: team?.teamMembers}})
+    const user = await getUserById(userId)
+    if (user){
+        user.teamId = teamId
+    }
     return result
 }
 
