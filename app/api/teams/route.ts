@@ -35,7 +35,7 @@ export async function POST(req: Request){
             return Response.json({'message': 'Team created successfully for user 1 and user 2'})
         }
         if (user2?.teamId){
-            return Response.json({'Error': 'User is already in a team'}, {status: 400})
+            return Response.json({'Error': 'User is already in a team'}, {status: 200})
         }
         if (user1?.teamId){
             const teamId = user1?.teamId

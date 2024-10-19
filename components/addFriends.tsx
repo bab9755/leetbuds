@@ -1,17 +1,33 @@
 
 import { useState } from 'react';
 import { Button } from './ui/button';
-import { UserPlus, Calendar } from 'lucide-react';
+import { UserPlus, Calendar, Check } from 'lucide-react';
 import { User } from '@/lib/db/db';
 
-
 interface UserListProp {
-    users: User[],
-    userId: string,
+  users: User[],
+  userId: string,
 
 }
 
+
+
+
 export const Friends: React.FC<UserListProp> = ({users, userId}) => {
+
+const [sent, setSent] = useState(false);
+const onSubmit = async(userId: string, anotherUserId: string) => {
+  const response = await fetch(`/api/teams?userId1=${userId}&userId2=${anotherUserId}`, {method: 'POST', body: JSON.stringify({id: 'test'})})
+  if (!response.ok) {
+    console.log(`An error occured adding the friend to the user`)
+  } else{
+    setSent(true)
+  }
+  const data = await response.json()
+  console.log(`The data from the POST request is: ${data}`)
+  
+}
+  
     return (
         <div>
             <div className="space-y-4">
@@ -24,10 +40,10 @@ export const Friends: React.FC<UserListProp> = ({users, userId}) => {
                       <span>{friend?.name}</span>
                     </div>
                     <div className="space-x-2">
-                      <Button size="sm" variant="outline">
+                      {sent ? <Button size="sm" className='bg-green-500 text-white' disabled><Check className="w-4 h-4 mr-1" />Sent!</Button> : <Button size="sm" variant="outline" onClick={() => onSubmit(userId, friend?._id)}>
                         <UserPlus className="w-4 h-4 mr-1" />
                         Add Friend
-                      </Button>
+                      </Button>}
                       <Button size="sm" variant="outline">
                         <Calendar className="w-4 h-4 mr-1" />
                         Schedule Interview
