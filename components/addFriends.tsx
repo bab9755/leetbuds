@@ -5,7 +5,7 @@ import { UserPlus, Calendar, Check } from 'lucide-react';
 import { User } from '@/lib/db/db';
 
 interface UserListProp {
-  users: User[],
+  user: User,
   userId: string,
 
 }
@@ -13,7 +13,7 @@ interface UserListProp {
 
 
 
-export const Friends: React.FC<UserListProp> = ({users, userId}) => {
+export const Friends: React.FC<UserListProp> = ({user, userId}) => {
 
 const [sent, setSent] = useState(false);
 const onSubmit = async(userId: string, anotherUserId: string) => {
@@ -30,17 +30,16 @@ const onSubmit = async(userId: string, anotherUserId: string) => {
   
     return (
         <div>
-            <div className="space-y-4">
-                {users.map((friend) => (
-                  <div key={friend?._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+            <div className="space-y-4 pb-2">
+                  <div key={user?._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                     <div className="flex items-center">
                       <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-3">
-                        {friend.name[0]}
+                        {user.name[0]}
                       </div>
-                      <span>{friend?.name}</span>
+                      <span>{user?.name}</span>
                     </div>
                     <div className="space-x-2">
-                      {sent ? <Button size="sm" className='bg-green-500 text-white' disabled><Check className="w-4 h-4 mr-1" />Sent!</Button> : <Button size="sm" variant="outline" onClick={() => onSubmit(userId, friend?._id)}>
+                      {sent ? <Button size="sm" className='bg-green-500 text-white' disabled><Check className="w-4 h-4 mr-1" />Sent!</Button> : <Button size="sm" variant="outline" onClick={() => onSubmit(userId, user?._id)}>
                         <UserPlus className="w-4 h-4 mr-1" />
                         Add Friend
                       </Button>}
@@ -50,7 +49,7 @@ const onSubmit = async(userId: string, anotherUserId: string) => {
                       </Button>
                     </div>
                   </div>
-                ))}
+                
               </div>
         </div>
     )

@@ -145,7 +145,10 @@ export function DashboardComponent() {
                   className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
-              <Friends users={filteredUsers} userId={userId}/>
+              {filteredUsers.map((user) => (
+                <Friends user={user} userId={userId}/>
+              ))}
+              
             </CardContent>
           </Card>
         )
