@@ -21,18 +21,22 @@ export const Question: React.FC<QuestionProps> = ({userId}) => {
     const [solution, setSolution ] = useState('')
     const [link, setLink] = useState('')
 
-    const updateQuestionStatus = (questionId: string, userId: string) => {
+    const updateQuestionStatus = async(questionId: string, userId: string) => {
         //the post request would be here where given the user id and the question id, you have 
-        
-
-
+        const response = await fetch(`/api/questions/${questionId}?userId=${userId}`, {method: 'POST', body: JSON.stringify({completed: completed})})
+        if (!response.ok) {
+            console.log(`An error occured updating the question status`)
+        }
     }
 
     return (
         <form action="">
             <div className="flex justify-between border-b border-gray-300 py-2">
                 <div>
-                    <Checkbox checked={completed} id="question" onClick={() => updateQuestionStatus(questionId, userId)}/>
+                    <Checkbox checked={completed} id="question" onClick={() => {
+                        setCompleted(!completed)//do the opposite of the current state of completed
+                        updateQuestionStatus(questionId, userId)
+                        }}/>
                 </div>
                 <div>
                     <label htmlFor="question" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"><Link href={link}>{question}</Link></label>
