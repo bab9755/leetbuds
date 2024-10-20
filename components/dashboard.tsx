@@ -11,6 +11,7 @@ import { fetchUsersButSelf } from '@/lib/db/db'
 import { User } from '@/lib/db/db'
 import next from 'next'
 import { Friends } from './addFriends'
+import { Questions } from './questions'
 export function DashboardComponent() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
@@ -51,6 +52,13 @@ export function DashboardComponent() {
     getSession();
     
   }, [name, progress, nextInterview]);
+
+  const getDashBoardInfo = async () => {
+    const response = await fetch('api/users/', {method: 'GET', body: JSON.stringify({id: userId})})
+  }
+  const loadQuestions = async () => {
+    
+  }
   
   const getFilteredUsers = (items: User[], query: string) => {
     if (!query){
