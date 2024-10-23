@@ -57,3 +57,7 @@ export async function POST(req: Request, context: {params: any}) {
         return Response.json({'Error': `Error sending a friend request: ${error}`})
     }
 }
+
+
+
+
