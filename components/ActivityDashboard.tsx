@@ -7,13 +7,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Bell, Divide } from 'lucide-react';
+import { Bell, Divide, User, Check, Headset } from 'lucide-react';
 import {useEffect, useState} from 'react'
+import AcceptRequestButton from "./AcceptRequestButton"
 
 interface NotificationProps {
     id: string,
     name: string,
     time?: Date,
+    type: string,
 }
 
 export default function ActivitityDashboard({userId}: {userId: string}) {
@@ -54,15 +56,23 @@ export default function ActivitityDashboard({userId}: {userId: string}) {
     
     return (
             
-            <div className="space-y-4 flex flex-col p-2">
-                        {notifications.map((notification) => (
-                            <div key={notification.id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-                                <div className="flex items-center">
-                                <span>{notification.name}</span>
-                                </div>
-                            </div>
-                        ))}
+        <div className="space-y-4 flex flex-col p-2">
+        {notifications.map((notification) => (
+          <div className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-3">
+                {notification.type === 'friendRequest' ? <User className="w-4 h-4 mr-1" /> :  notification.type === 'solvedQuestion' ? <Check className="w-4 h-4 mr-1" /> : notification.type === 'interview' ? <Headset className="w-4 h-4 mr-1" /> : null}
+              </div>
+              {notification.type !== 'friendRequest' && (
+                <span>{notification.name}</span>
+              )}
+              {notification.type === 'friendRequest' && (
+                  <AcceptRequestButton userId={userId} senderId={notification.id} />
+              )}
             </div>
+          </div>
+        ))}
+      </div>
            
     );
 }

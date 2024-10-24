@@ -48,7 +48,7 @@ export async function POST(req: Request, context: {params: any}) {
         const friendRequests = friend?.friendRequests || []
         friendRequests.push(userId)
         await userCollection?.updateOne({_id: new ObjectId(friendId)}, {$set: {friendRequests: friendRequests}})
-        const response = await fetch(process.env.SERVER_URL +`/api/users/${friendId}/notifications`, {method: 'POST', body: JSON.stringify({name: 'You got a friend request', type: 'friendRequest'})})
+        const response = await fetch(process.env.SERVER_URL +`/api/users/${friendId}/notifications`, {method: 'POST', body: JSON.stringify({name: `You got a friend request from ${user?.name}`, type: 'friendRequest', senderId: userId})})
         if (!response.ok){
             return Response.json({"Error": `Error sending the notification to the user`}, {status: 400})
         }
