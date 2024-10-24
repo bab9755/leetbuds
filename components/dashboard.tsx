@@ -12,6 +12,8 @@ import { User } from '@/lib/db/db'
 import next from 'next'
 import { Friends } from './addFriends'
 import { Questions } from './questions'
+import { Bell } from 'lucide-react';
+import  NotificationButton  from './NotificationButton'
 export function DashboardComponent() {
   const [activeSection, setActiveSection] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
@@ -137,8 +139,21 @@ export function DashboardComponent() {
             </CardContent>
           </Card>
         )
+      case 'activity':
+        return (
+          <Card>  
+            <CardHeader>  
+              <CardTitle>Activity</CardTitle>  
+            </CardHeader>  
+            <CardContent>  
+              <p>You activity log.</p>  
+              <NotificationButton userId={userId} />
+            </CardContent>  
+          </Card>  
+        )
       case 'findFriends':
         return (
+          <div>
           <Card>
             <CardHeader>
               <CardTitle>Find Friends</CardTitle>
@@ -159,6 +174,27 @@ export function DashboardComponent() {
               
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Find Friends</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <Input
+                  type="text"
+                  placeholder="Search for friends..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                />
+              </div>
+              {filteredUsers.map((user) => (
+                <Friends user={user} userId={userId}/>
+              ))}
+              
+            </CardContent>
+          </Card>
+          </div>
         )
       case 'settings':
         return (
