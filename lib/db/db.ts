@@ -126,6 +126,28 @@ export const addFriend = async (userId: any, anotherUserId: any) => {
 
 }
 
+export const acceptFriendRequest = async (userId: any, anotherUserId: any) => {
+
+    //essentially make them mutuals and it is only now that they can form a team
+    try{
+        const user1 = await getUserById(userId);
+        const user2 = await getUserById(anotherUserId);
+        const userCollection = await getDB('leetbuds', 'users');
+        const user1Friends = user1?.friends || []
+        const user2Friends = user2?.friends || []
+        
+        user1Friends?.push(anotherUserId)
+        user2Friends?.push(userId)
+        const result1 = await userCollection?.updateOne({_id: new ObjectId(userId)}, {$set: {friends: user1Friends}})
+        const result2 = await userCollection?.updateOne({_id: new ObjectId(anotherUserId)}, {$set: {friends: user2Friends}})
+
+    } catch (error){
+        console.log(`An error occured accepting the friend request: ${error}`)
+    }
+    
+    
+}
+
 export interface User {
     _id: string;         // or ObjectId if you're using ObjectId
     name: string;

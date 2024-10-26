@@ -25,7 +25,7 @@ export default function ActivitityDashboard({userId}: {userId: string}) {
     const [notifications, setNotifications] = useState<NotificationProps[]>([]);
     const fetchNotifications = async(userId: string) => {
 
-        try{
+        try{ //I need to also get the id of the sender
             const response = await fetch(process.env.SERVER_URL + `/api/users/${userId}/notifications`, {method: 'GET', body: JSON.stringify({limit: 10})})
             if (!response.ok) {
                 console.log(`An error occured fetching the notifications`)
